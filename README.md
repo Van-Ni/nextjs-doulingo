@@ -35,9 +35,22 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+```
+- For components use       export const afunc= () => {}
+- For page use             const bfunct = () => {}   export default bfunct;
 
+```
+
+```
+- Folder Name with paranthesis () will not be part of url , but will be routed
+- Layout page is used to wrap up the page.tsx file
+
+```
+
+```
 node -v
 npm -v
 npx create-next-app@latest
 npx shadcn-ui@latest init
 npm run dev
+```
