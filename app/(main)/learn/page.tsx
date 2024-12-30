@@ -4,13 +4,23 @@ import React from "react";
 import { Header } from "./header";
 import { UserProgress } from "@/components/user-progress";
 import { title } from "process";
+import { getUserProgress } from "@/db/queries";
+import { redirect } from "next/navigation";
 
-const LearnPage = () => {
+const LearnPage = async () => {
+  const userProgressData = getUserProgress();
+
+  const [userProgress] = await Promise.all([userProgressData]);
+
+  if (!userProgress || !userProgress.activeCourse) {
+    redirect("/courses");
+  }
+
   return (
     <div className="flex flex-row-reverse px-6 gap-[46px]">
       <StickyWrapper>
         <UserProgress
-          activeCourses={{title: "Spanish", imageSrc: "/es.svg"}}
+          activeCourses={{ title: "Spanish", imageSrc: "/es.svg" }}
           hearts={100}
           points={10}
           hasActiveSubscription={false}

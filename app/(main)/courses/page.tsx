@@ -1,17 +1,17 @@
-import { GetCourses } from "@/db/queries";
+import { GetCourses, getUserProgress } from "@/db/queries";
 import { List } from "./list";
 
 const CoursesPage = async () => {
-  //   const userProgressData = getUserProgress();
+    const userProgressData = getUserProgress();
   const coursesData = GetCourses();
 
-  const [courses] = await Promise.all([coursesData]);
-  console.log("🚀 ~ CoursesPage ~ coursesData:", courses);
+  const [courses, userProgress] = await Promise.all([coursesData, userProgressData]);
+  console.log("🚀 ~ CoursesPage ~ userProgress:", userProgress)
 
   return (
     <div className="h-full px-3 mx-auto max-w-[912px]">
       <h1 className="text-2xl font-bold text-neutral-700">Language Courses</h1>
-      <List courses={courses}  />
+      <List courses={courses} activeCourseId={userProgress?.activeCourseId} />
       {/* {JSON.stringify(data)} */}
     </div>
   );
