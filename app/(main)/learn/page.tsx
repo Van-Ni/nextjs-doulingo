@@ -4,13 +4,15 @@ import React from "react";
 import { Header } from "./header";
 import { UserProgress } from "@/components/user-progress";
 import { title } from "process";
-import { getUserProgress } from "@/db/queries";
+import { getUnits, getUserProgress } from "@/db/queries";
 import { redirect } from "next/navigation";
 
 const LearnPage = async () => {
+  const unitsData = getUnits();
   const userProgressData = getUserProgress();
 
-  const [userProgress] = await Promise.all([userProgressData]);
+  const [userProgress, units] = await Promise.all([userProgressData, unitsData]);
+  console.log("🚀 ~ LearnPage ~ units:", units)
 
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
