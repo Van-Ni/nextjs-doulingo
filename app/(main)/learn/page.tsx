@@ -6,13 +6,13 @@ import { UserProgress } from "@/components/user-progress";
 import { title } from "process";
 import { getUnits, getUserProgress } from "@/db/queries";
 import { redirect } from "next/navigation";
+import { Unit } from "./unit";
 
 const LearnPage = async () => {
   const unitsData = getUnits();
   const userProgressData = getUserProgress();
 
   const [userProgress, units] = await Promise.all([userProgressData, unitsData]);
-  console.log("🚀 ~ LearnPage ~ units:", units)
 
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
@@ -29,7 +29,20 @@ const LearnPage = async () => {
         />
       </StickyWrapper>
       <FeedWrapper>
-        <Header title={"VietNam"} />
+        <Header title={userProgress.activeCourse.title} />
+        {units.map((unit) => (
+          <div key={unit.id} className="mb-10">
+            <Unit
+              id={unit.id}
+              title={unit.title}
+              description={unit.description}
+              order={unit.order}
+              lessons={unit.lessons}
+              activeLesson={undefined}
+              activeLessonPercentage={0}
+            />
+          </div>
+        ))}
       </FeedWrapper>
     </div>
   );
