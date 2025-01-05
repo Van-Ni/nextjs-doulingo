@@ -28,6 +28,7 @@ export const upsertUserProgress = async (courseId: number) => {
   
     const existingUserProgress = await getUserProgress();
   
+    // Update existing user progress
     if (existingUserProgress) {
       await db.update(userProgress).set({
         activeCourseId: courseId,
@@ -40,6 +41,7 @@ export const upsertUserProgress = async (courseId: number) => {
       redirect("/learn");
     }
   
+    // Create new user progress
     await db.insert(userProgress).values({
       userId,
       activeCourseId: courseId,

@@ -27,8 +27,8 @@ export const LessonButton = ({
   current,
   percentage,
 }: Props) => {
-  const cyclelength = 8;
-  const cycleIndex = index % cyclelength;
+  const cyclelenghth = 8;
+  const cycleIndex = index % cyclelenghth;
 
   let indentationLevel;
 
@@ -41,7 +41,6 @@ export const LessonButton = ({
   } else {
     indentationLevel = cycleIndex - 8;
   }
-  console.log("🚀 ~ indentationLevel:", index, indentationLevel)
 
   const rightPosition = indentationLevel * 40;
   const isFirst = index === 0;
@@ -63,6 +62,7 @@ export const LessonButton = ({
           marginTop: isFirst && !isCompleted ? 60 : 24,
         }}
       >
+        {/* Current Lesson */}
         {current ? (
           <div className="h-[102px] w-[102px] relative">
             <div className="absolute -top-6 left-2.5 px-3 py-2.5 border-2 font-bold uppercase text-green-500 bg-white rounded-xl animate-bounce tracking-wide z-10">
@@ -85,7 +85,7 @@ export const LessonButton = ({
             >
               <Button
                 size="rounded"
-                // variant={locked ? "locked" : "secondary"}
+                variant={locked ? "locked" : "secondary"}
                 className="h-[70px] w-[70px] border-b-8"
               >
                 <Icon
@@ -104,7 +104,7 @@ export const LessonButton = ({
           <div>
             <Button
               size="rounded"
-              // variant={locked ? "locked" : "secondary"}
+              variant={locked ? "locked" : "secondary"}
               className="h-[70px] w-[70px] border-b-8"
             >
               <Icon

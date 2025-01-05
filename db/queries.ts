@@ -93,9 +93,9 @@ export const getUnits = cache(async () => {
     return [];
   }
 
-  // TODO confirm whether order is needed
+  // find all units in the active course
   const data = await db.query.units.findMany({
-    where: eq(units.courseId, userProgress.activeCourseId),
+    where: eq(units.courseId, userProgress.activeCourseId), // course: 1, active: course 1
     with: {
       lessons: {
         with: {
@@ -110,7 +110,7 @@ export const getUnits = cache(async () => {
       },
     },
   });
-
+  
   const normalizationData = data.map((unit) => {
     const lessonWithCompletedStatus = unit.lessons.map((lesson) => {
       if (lesson.challenges.length === 0) {
