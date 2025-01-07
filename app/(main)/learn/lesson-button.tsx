@@ -65,6 +65,7 @@ export const LessonButton = ({
         {/* Current Lesson */}
         {current ? (
           <div className="h-[102px] w-[102px] relative">
+            {/* Start Badge */}
             <div className="absolute -top-6 left-2.5 px-3 py-2.5 border-2 font-bold uppercase text-green-500 bg-white rounded-xl animate-bounce tracking-wide z-10">
               Start
               <div
@@ -72,6 +73,8 @@ export const LessonButton = ({
               border-x-transparent border-t-8 transform translate-x-1/2"
               />
             </div>
+
+            {/* Progress Circle */}
             <CircularProgressbarWithChildren
               value={Number.isNaN(percentage) ? 0 : percentage}
               styles={{
@@ -79,7 +82,7 @@ export const LessonButton = ({
                   stroke: "#4ade80",
                 },
                 trail: {
-                  stroke: "e5e7eb",
+                  stroke: "#e5e7eb",
                 },
               }}
             >
