@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import { Header } from "./header";
 import { QuestionBubble } from "./question-bubble";
 import { Challenge } from "./challenge";
+import { Footer } from "./footer";
+import { upsertChallengeProgress } from "@/action/challenge-progress";
+import { toast } from "sonner";
+import { reduceHearts } from "@/action/user-progress";
 
 type Props = {
   initialLessonId: number;
@@ -48,8 +52,8 @@ export const Quiz = ({
   const [status, setStatus] = useState<"correct" | "wrong" | "none">("none");
 
   const challenge = challenges[activeIndex];
+  console.log("🚀 ~ challenge:", challenge)
   const options = challenge?.challengeOptions ?? [];
-  console.log("🚀 ~ options:", options);
 
   const onNext = () => {
     setActiveIndex((current) => current + 1);
@@ -76,9 +80,49 @@ export const Quiz = ({
     }
 
     const correctOption = options.find((option) => option.correct);
-    if (!correctOption) return;
 
-    setStatus(selectedOption === correctOption.id ? "correct" : "wrong");
+    if (!correctOption) {
+      return;
+    }
+
+    if (correctOption.id === selectedOption) {
+      startTransition(() => {
+        upsertChallengeProgress(challenge.id)
+          .then((response) => {
+            if (response?.error === "hearts") {
+              // openHeartsModal();
+              return;
+            }
+            // correctControls.play();
+            setStatus("correct");
+            setPercentage((prev) => prev + 100 / challenges.length);
+
+            // This is practice
+
+            if (initialPercentage === 100) {
+              setHearts((prev) => Math.min(prev + 1, 5));
+            }
+          })
+          .catch(() => toast.error("Something Went Wrong. Please Try Again"));
+      });
+    } else {
+      startTransition(() => {
+        reduceHearts(challenge.id)
+          .then((response) => {
+            if (response?.error === "hearts") {
+              // openHeartsModal();
+              return;
+            }
+            // incorrectControls.play();
+            setStatus("wrong");
+
+            if (!response?.error) {
+              setHearts((previous) => Math.max(previous - 1, 0));
+            }
+          })
+          .catch(() => toast.error("Something Went Wrong. Please Try Again"));
+      });
+    }
   };
 
   const title =
@@ -100,7 +144,7 @@ export const Quiz = ({
               {title}
             </h1>
             <div>
-              {challenge.type === "ASSIST" && (
+              {challenge?.type === "ASSIST" && (
                 <QuestionBubble question={challenge.question} />
               )}
 
@@ -116,6 +160,11 @@ export const Quiz = ({
           </div>
         </div>
       </div>
+      <Footer
+        disabled={pending || !selectedOption}
+        status={status}
+        onCheck={onContinue}
+      />
     </>
   );
 };
